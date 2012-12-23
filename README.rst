@@ -4,6 +4,10 @@ Projects to Do
 
 An assortment of projects to work on in order to improve
 
+*******
+Numbers
+*******
+
 ========================
 Find PI to the Nth digit
 ========================
@@ -56,6 +60,10 @@ Dijkstra's Algorithm
 ====================
 
 Find the shortest path through a graph using it's edges
+
+****
+Text
+****
 
 =========
 Pig Latin
@@ -170,9 +178,9 @@ Web bot
 * Create an automated bot that checks websites for me
 * Possible move to creating an IRC bot, etc.
 
-***
-GUI
-***
+*******
+Classes
+*******
 
 Various programs that involve interfaces with the user
 

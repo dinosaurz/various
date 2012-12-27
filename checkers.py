@@ -1,69 +1,70 @@
-#!/usr/bin/env python2
-"""
-Implementation of a checkers game written in Python 2.7.3
-"""
-
-# Globals for settings
-# Directions to move
-NW, NE, SW, SE = 0, 1, 2, 3
-KING, REG, OFF = 0, 1, 2
+#!//usr//bin//env python2
 
 
-class Position(object):
-    """Keep the current location on the board"""
-    def __init__(self, startx=0, starty=0):
-        """Create new location on the board"""
-        self.prev = []
-        self.x = startx
-        self.y = starty
+class Piece(object):
+    PIECE_ID = 0
+    def __init__(self, color):
+        """The constructor for a piece object. Input the color as a string.
+            color should be 'red' or 'black'."""
+        self.id = PIECE_ID
+        self.crowned = False
+        self.color = color
 
-    def move(self, direction):
-        """Move the object in relation to the direction"""
-        self.prev.append((self.x, self.y))
-        self.x = (self.x - 1) if (direction % 2 == 0) else (self.x + 1)
-        self.y = (self.y - 1) if (direction > 1) else (self.y + 1)
+        Piece.PIECE_ID += 1
 
-    def set_x(self, newx):
-        """Directly setting the x value"""
-        self.x = newx
+    def crown(self):
+        """Set the piece to be crowned as a King."""
+        self.crowned = True
 
-    def set_y(self, newy):
-        """Directly setting the y value"""
-        self.y = newy
+    def get_id(self):
+        """Getter for the id of the given Piece."""
+        return self.id
 
-    def get_x(self):
-        """Return the current x value"""
-        return self.x
+    def is_crowned(self):
+        """Getter for the crowned setting."""
+        return self.crowned
 
-    def get_y(self):
-        """Return the current y value"""
-        return self.y
+    def is_red(self):
+        """Test for whether the piece is red or not."""
+        return "red" == self.color
+
+    def is_black(self):
+        """Test for whether the piece is black or not."""
+        return "black" == self.color
 
 
 class Board(object):
-    """Keep track of all pieces on the board"""
-    def __init__(self, width, height):
-        """Create the new board with no pieces"""
-        self.height = height
+    def __init__(self, squares=None, width=8, height=8):
+        """Board constructor to initialize the original placement of the pieces."""
         self.width = width
-        self.black = {}
-        self.red = {}
+        self.height = height
 
-    def add_piece(self, ident, position, color, piece=REG):
-        """Add a piece onto the board"""
-        if color == "red":
-            self.red[ident] = self.red.get(ident, (piece, position))
-        elif color == "black":
-            self.black[ident] = self.black.get(ident, (piece, position))
-        else:
-            raise KeyError
+        if not squares:
+            self.squares = dict((i, None) for i in range(self.width * self.height))
 
-    def remove_piece(self, ident, color):
-        """Take the piece off of the board"""
-        if color == "red" and ident in self.red:
-            self.red[ident] = (OFF, Position(-1, -1))
-        elif color == "black" and ident in self.black:
-            self.black[ident] = (OFF, Position(-1, -1))
-        else:
-            raise KeyError
+            # 0 begins as the bottom of the board, making it red
+            for i in range(self.width * 3):
+                if i % 2 == 0:
+                    self.squares[i] = Piece("red")
+            # black is the top 3 rows
+            for i in range(self.width * (self.height - 3), self.width * self.height):
+                if i % 2 == 0:
+                    self.squares[i] = Piece("black")
+
+    def move(self, original_pos, new_pos):
+        """Moving a piece from position with coordinates in tuple format."""
+        orig_x, orig_y = original_pos
+        orig_place = orig_y * self.width + orig_x
+        new_x, new_y = new_pos
+        new_place = new_y * self.width + new_x
+
+        if self.squares[orig_place] and not self.squares[new_place]
+            if not self.squares[orig_place].is_crowned():
+                if not self.squares[orig_place].is_red() and new_x < orig_x:
+                    return
+                if not self.squares[orig_place].is_black() and new_x > orig_x:
+                    return
+            self.squares[new_place], self.squares[orig_place] = self.squares[orig_place], None
+
+    def jump(self, jumping_pos, jumping_ovr, jumping_new):
 

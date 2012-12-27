@@ -20,6 +20,18 @@ def position_check(pos_object):
     pos_object.move(checkers.SW)
     print check_coord(cur_x, cur_y, pos_object)          #true
 
-pos = checkers.Position()
-position_check(pos)
+def board_test(board):
+    def draw_board(board, width):
+        for spot in board:
+            if board[spot].color == checkers.RED:
+                print "R",
+            elif board[spot].color == checkers.BLACK:
+                print "B",
+            else:
+                print "-",
+            if spot in [i - 1 for i in range(0, 64, 8)]:
+                print
+    draw_board(board.places, board.width)
+
+board_test(checkers.Board())
 

@@ -316,11 +316,16 @@ A simple chess game with player versus player
 * Possibly make it online
 * Add an AI to play against?
 
-========
-Checkers
-========
+============
+IP: Checkers
+============
 
 See chess, but implement checkers as the game instead
+
+TODO
+====
+* Add a UI.
+* Create proper drawing methods
 
 =======
 Hangman

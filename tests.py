@@ -31,29 +31,29 @@ def board_test(board):
             if piece in [i - 1 for i in range(0, width * height, width)]:
                 print
 
-    draw_board(board.squares, board.width, board.height)
+    print board
     print "\n"
     print board.squares[2 * board.width + 1]
     print board.squares[3 * board.width]
     print board.move((1, 2), (0, 3))
-    draw_board(board.squares, board.width, board.height)
+    print board
     print "\n"
     print board.squares[5 * board.width + 2]
     print board.squares[4 * board.width + 1]
     print board.move((2, 5), (1, 4))
-    draw_board(board.squares, board.width, board.height)
+    print board
     print "\n"
     print board.squares[3 * board.width + 0]
     print board.squares[4 * board.width + 1]
     print board.squares[5 * board.width + 2]
     print board.jump((0, 3), (1, 4), (2, 5))
-    draw_board(board.squares, board.width, board.height)
+    print board
     print "\n"
     board.squares[1] = checkers.Piece("red")
-    draw_board(board.squares, board.width, board.height)
+    print board
     print "\n"
     print board.crown((1, 0))
-    draw_board(board.squares, board.width, board.height)
+    print board
 
 board_test(checkers.Board())
 

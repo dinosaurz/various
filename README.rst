@@ -8,13 +8,13 @@ An assortment of projects to work on in order to improve
 Numbers
 *******
 
-========================
-Find PI to the Nth digit
-========================
+============================
+    Find PI to the Nth digit
+============================
 
-* Enter a number and have the program generate PI up to that many decimal
-  places
-* Keep a limit as to how many decimal places to use
+    * Enter a number and have the program generate PI up to that many decimal
+      places
+    * Keep a limit as to how many decimal places to use
 
 ===================
 Mortgage Calculator

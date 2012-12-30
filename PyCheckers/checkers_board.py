@@ -97,28 +97,28 @@ class Piece(object):
 # - end boolean functions -----------------------------------------------------
 
 
-class Board(object):
+class CheckersBoard(object):
 
 # - start builtin functions ---------------------------------------------------
 
-    def __init__(self, squares=None, width=8, height=8):
+    def __init__(self, squares=None, ncols=8, nrows=8):
         """Board constructor to initialize the placement of the pieces."""
-        self.width = width
-        self.height = height
+        self.ncols = ncols
+        self.nrows = nrows
 
         if not squares:
-            self.squares = dict((i, None) for i in xrange(width * height))
+            self.squares = dict((i, None) for i in xrange(ncols * nrows))
 
             # 0 begins as the top of the board, making it black
-            for i in xrange(width * 3):
-                row, col = i // width, i % width
+            for i in xrange(ncols * 3):
+                row, col = i // ncols, i % ncols
                 if row % 2 == 0 and not col % 2 == 0:
                     self.squares[i] = Piece("black")
                 if not row % 2 == 0 and col % 2 == 0:
                     self.squares[i] = Piece("black")
             # red would be the bottom 3 rows
-            for i in xrange(width * (height - 3), width * height):
-                row, col = i // width, i % width
+            for i in xrange(ncols * (nrows - 3), ncols * nrows):
+                row, col = i // ncols, i % ncols
                 if row % 2 == 0 and not col % 2 == 0:
                     self.squares[i] = Piece("red")
                 if not row % 2 == 0 and col % 2 == 0:
@@ -127,12 +127,12 @@ class Board(object):
     # testing purpose drawing of the board
     def __repr__(self):
         """Way to represent the board itself through an ascii display."""
-        width, height = self.width, self.height  # easier to read
+        ncols, nrows = self.ncols, self.nrows  # easier to read
 
-        rep = " ".join([str(n-1) if n else " " for n in xrange(self.width+1)])
+        rep = " ".join([str(n-1) if n else " " for n in xrange(self.ncols+1)])
         for piece in self.squares:
-            if piece in [i for i in xrange(0, width * height, width)]:
-                rep += "\n{0} ".format(piece // width)
+            if piece in [i for i in xrange(0, ncols * nrows, ncols)]:
+                rep += "\n{0} ".format(piece // ncols)
 
             if self.squares[piece]:
                 rep += "{0} ".format(self.squares[piece])
@@ -149,8 +149,8 @@ class Board(object):
         orig_x, orig_y = orig_pos
         new_x, new_y = new_pos
 
-        orig_i = orig_y * self.width + orig_x
-        new_i = new_y * self.width + new_x
+        orig_i = orig_y * self.ncols + orig_x
+        new_i = new_y * self.ncols + new_x
 
         orig_piece = self.squares[orig_i]
         new_piece = self.squares[new_i]
@@ -169,9 +169,9 @@ class Board(object):
         land_x, land_y = j_land
 
         # indexes for each square
-        orig_i = orig_y * self.width + orig_x
-        over_i = over_y * self.width + over_x
-        land_i = land_y * self.width + land_x
+        orig_i = orig_y * self.ncols + orig_x
+        over_i = over_y * self.ncols + over_x
+        land_i = land_y * self.ncols + land_x
 
         # piece for quicker access
         orig_p = self.squares[orig_i]
@@ -187,10 +187,10 @@ class Board(object):
     def crown(self, piece):
         """Enhance the piece to be able to move in reverse as well."""
         piece_x, piece_y = piece
-        piece_i = piece_y * self.width + piece_x
+        piece_i = piece_y * self.ncols + piece_x
 
         # Ensure the piece is in the last column from the starting position
-        if piece_y == self.height - 1 and self.squares[piece_i].is_black():
+        if piece_y == self.nrows - 1 and self.squares[piece_i].is_black():
             self.squares[piece_i].crown()
         elif piece_y == 0 and self.squares[piece_i].is_red():
             self.squares[piece_i].crown()
@@ -210,7 +210,7 @@ class Board(object):
             """Helper function to find the new index."""
             orig_x, orig_y = orig
             off_x, off_y = off
-            return (orig_y - off_y) * self.width + (orig_x - off_x)
+            return (orig_y - off_y) * self.ncols + (orig_x - off_x)
 
         p_x, p_y = piece
         p_i = _index(piece, (0, 0))
@@ -248,13 +248,13 @@ class Board(object):
         """Get the necessary piece at the index given."""
         return self.squares[index]
 
-    def get_width(self):
-        """Return the width of the board."""
-        return self.width
+    def get_ncols(self):
+        """Return the ncols of the board."""
+        return self.ncols
 
-    def get_height(self):
-        """Return the height of the board."""
-        return self.height
+    def get_nrows(self):
+        """Return the nrows of the board."""
+        return self.nrows
 
     def get_board(self):
         """Return the entire board if necessary."""

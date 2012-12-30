@@ -1,4 +1,17 @@
 #!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+"""
+Absolute Position Checkers Game
+
+author: David Karwowski
+last editted: December 2012
+"""
+import sys
+
+try:
+    from PySide import QtCore, QtGui
+except ImportError:
+    from PyQt4 import QtCore, QtGui
 
 
 class Piece(object):
@@ -18,6 +31,10 @@ class Piece(object):
     def __eq__(self, other):
         """Equality test based on color."""
         return self.is_red() == other.is_red()
+
+    def __ne__(self, other):
+        """Equality test based on the color."""
+        return not self.__eq__(other)
 
     def __repr__(self):
         """Representation when called as a string."""
@@ -81,7 +98,7 @@ class Piece(object):
         possibles = []
         # test the possible jumps first
         for i, _ in enumerate(over_pos):  # same length as land_pos
-            if over_pos[i][1] and not self == over_pos[i][1]:
+            if over_pos[i][1] and self != over_pos[i][1]:
                 possibles.append(land_pos[i])
         return self.can_move(orig_pos, possibles)
 
@@ -98,17 +115,17 @@ class Board(object):
         self.height = height
 
         if not squares:
-            self.squares = dict((i, None) for i in range(width * height))
+            self.squares = dict((i, None) for i in xrange(width * height))
 
             # 0 begins as the top of the board, making it black
-            for i in range(width * 3):
+            for i in xrange(width * 3):
                 row, col = i // width, i % width
                 if row % 2 == 0 and not col % 2 == 0:
                     self.squares[i] = Piece("black")
                 if not row % 2 == 0 and col % 2 == 0:
                     self.squares[i] = Piece("black")
             # red would be the bottom 3 rows
-            for i in range(width * (height - 3), width * height):
+            for i in xrange(width * (height - 3), width * height):
                 row, col = i // width, i % width
                 if row % 2 == 0 and not col % 2 == 0:
                     self.squares[i] = Piece("red")
@@ -190,17 +207,104 @@ class Board(object):
         return True
 
 # - end piece movement functions ----------------------------------------------
+# - start possible movement functions -----------------------------------------
+
+    def possible_moves(self, piece):
+        """Return a list of coordinated in (x, y) format for possible landing.
+        Attributes
+            piece : (x, y)
+        """
+        def _index(orig, off):
+            """Helper function to find the new index."""
+            orig_x, orig_y = orig
+            off_x, off_y = off
+            return (orig_y - off_y) * self.width + (orig_x - off_x)
+
+        p_x, p_y = piece
+        p_i = _index(piece, (0, 0))
+
+        # pass a list of the four corners first for basic possibles
+        move_land = [((p_x + i, p_y + j), self.squares[_index(piece, (i, j))])\
+                     for i in [-1, 1] for j in [-1, 1]]
+        possibles = self.squares[p_i].can_move(piece, move_land)
+
+        # next append the new list from jumps
+        jump_land = [((p_x + i, p_y + j), self.squares[_index(piece, (i, j))])\
+                     for j in [-2, 2] for i in [-2, 2]]
+        possibles += self.squares[p_i].can_jump(piece, move_land, jump_land)
+
+        # clean out the list of duplicates, although there should be none
+        return [m for i, m in enumerate(possibles) if m not in possibles[:i]]
+
+# - end possible movement functions -------------------------------------------
 # - start boolean functions ---------------------------------------------------
 
-    def has_red_won(self):
+    def red_has_won(self):
         """Test is red has won or not."""
-        return not any([self.squares[p].is_red() for p in self.squares \
+        return not any([self.squares[p].is_red() for p in self.squares        \
                         if self.squares[p]])
 
-    def has_black_won(self):
+    def black_has_won(self):
         """Test whether black has won or not."""
-        return not any([self.squares[p].is_black() for p in self.squares \
+        return not any([self.squares[p].is_black() for p in self.squares      \
                         if self.squares[p]])
 
 # - end boolean functions -----------------------------------------------------
+# - start getter functions ----------------------------------------------------
+
+    def get_piece(self, index):
+        """Get the necessary piece at the index given."""
+        return self.squares[index]
+
+    def get_width(self):
+        """Return the width of the board."""
+        return self.width
+
+    def get_height(self):
+        """Return the height of the board."""
+        return self.height
+
+    def get_board(self):
+        """Return the entire board if necessary."""
+        return self.squares
+
+
+class Checkers(QtGui.QWidget):
+
+# - start builtin functions ---------------------------------------------------
+
+    def __init__(self):
+        super(Checkers, self).__init__()
+
+        # Objects necessary
+        self.board = Board()
+
+        self._init_ui()
+
+    def _init_ui(self):
+        """Initialize all features in the UI itself."""
+        # basic sizes for everything
+        self.square_size, self.piece_size, self.pad = 50, 40, 20
+        self.board_height = self.square_size * self.board.get_height()
+        self.board_width = self.square_size * self.board.get_width()
+        self.ui_height = self.board_height + 2 * self.pad
+        self.ui_width = self.board_width + 2 * self.pad
+
+        # create the inner board
+        self.ui_board = QtGui.QFrame(self)
+        self.ui_board.setGeometry(self.pad, self.pad,                         \
+                                  self.board_width, self.board_height)
+        self.ui_board.setStyleSheet("QWidget { background-color: black }")
+
+        # True UI creation
+        self.setGeometry(200, 200, self.ui_width, self.ui_height)
+        self.setWindowTitle("Checkers v0.1")
+        self.show()
+
+# - end builtin functions -----------------------------------------------------
+
+if __name__ == "__main__":
+    app = QtGui.QApplication(sys.argv)
+    checkers = Checkers()
+    app.exec_()
 

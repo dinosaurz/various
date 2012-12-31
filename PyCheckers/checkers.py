@@ -94,7 +94,7 @@ class DrawableCheckers(QtGui.QWidget):
         grid_pen.setWidth(self.gridwidth)
         painter.setPen(grid_pen)
 
-        # combined size of a block with the grid line
+        # combined size of a square with the grid line
         squaregrid_size = self.squaresize + self.gridwidth
 
         # horizontal grid
@@ -136,7 +136,7 @@ class DrawableCheckers(QtGui.QWidget):
                                    squaregrid_size, squaregrid_size)
 
         painter.fillRect(square_rect, color)
-        painter.drawRect(block_rect)
+        painter.drawRect(square_rect)
 
     def _draw_ellipse(self, painter, row, col, color):
         piece_pen = QtGui.QPen(QtGui.QColor(self.piece_border_color))

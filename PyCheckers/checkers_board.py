@@ -112,16 +112,12 @@ class CheckersBoard(object):
             # 0 begins as the top of the board, making it black
             for i in xrange(ncols * 3):
                 row, col = i // ncols, i % ncols
-                if row % 2 == 0 and not col % 2 == 0:
-                    self.squares[i] = Piece("black")
-                if not row % 2 == 0 and col % 2 == 0:
+                if row % 2 == col % 2:
                     self.squares[i] = Piece("black")
             # red would be the bottom 3 rows
             for i in xrange(ncols * (nrows - 3), ncols * nrows):
                 row, col = i // ncols, i % ncols
-                if row % 2 == 0 and not col % 2 == 0:
-                    self.squares[i] = Piece("red")
-                if not row % 2 == 0 and col % 2 == 0:
+                if row % 2 == col % 2:
                     self.squares[i] = Piece("red")
 
     # testing purpose drawing of the board

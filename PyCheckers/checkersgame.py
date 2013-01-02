@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-Absolute Position Checkers Game
+PyCheckers - Python implementation of a simple checkers game.
 
-author: David Karwowski
-last editted: December 2012
+Currently does not support any sort of AI game play. This is the main file
+holding only the Qt information.
 """
+__author__ = 'David Karwowski'
+__version__ = '0.01b'
+
 import sys
 
 try:

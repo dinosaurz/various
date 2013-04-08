@@ -15,8 +15,8 @@ try:
 except ImportError:
     from PyQt4 import QtCore, QtGui
 
-from .checkersmodel import CheckersBoard
-from .aboutdialog import AboutDialog
+from checkersmodel import CheckersBoard
+#from aboutdialog import AboutDialog
 
 
 class DrawableCheckers(QtGui.QWidget):

@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 """Unit tests for the various classes"""
-import checkers
+import checkersgame
 
 
 def position_check(pos_object):
@@ -11,13 +11,13 @@ def position_check(pos_object):
     cur_x = pos_object.get_x()
     cur_y = pos_object.get_y()
 
-    pos_object.move(checkers.NW)
+    pos_object.move(checkersgame.NW)
     print check_coord(cur_x + 1, cur_y + 1, pos_object)  #false
-    pos_object.move(checkers.SE)
+    pos_object.move(checkersgame.SE)
     print check_coord(cur_x, cur_y, pos_object)          #true
-    pos_object.move(checkers.NE)
+    pos_object.move(checkersgame.NE)
     print check_coord(cur_x - 1, cur_y + 1, pos_object)  #false
-    pos_object.move(checkers.SW)
+    pos_object.move(checkersgame.SW)
     print check_coord(cur_x, cur_y, pos_object)          #true
 
 def board_test(board):
@@ -49,11 +49,11 @@ def board_test(board):
     print board.jump((0, 3), (1, 4), (2, 5))
     print board
     print "\n"
-    board.squares[1] = checkers.Piece("red")
+    board.squares[1] = checkersgame.Piece("red")
     print board
     print "\n"
     print board.crown((1, 0))
     print board
 
-board_test(checkers.Board())
+board_test(checkersgame.Board())
 
